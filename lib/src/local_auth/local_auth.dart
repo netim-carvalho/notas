@@ -59,6 +59,7 @@ class LocalAuth {
         authMessages: <AuthMessages>[
           const AndroidAuthMessages(
             signInTitle: 'Oops! Autenticação Biometrica Requerida!',
+            biometricHint: "Verificar Identidade",
             cancelButton: 'Cancelar',
           ),
         ],
