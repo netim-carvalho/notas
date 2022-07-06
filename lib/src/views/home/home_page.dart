@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Text(
                                 homeController.rxList[index].description,
-                                style: const TextStyle(fontSize: 18),
+                                style: const TextStyle(fontSize: 19),
                               ),
                               Text(
                                 DateFormat.yMd()
