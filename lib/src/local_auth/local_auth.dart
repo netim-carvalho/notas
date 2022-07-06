@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_android/types/auth_messages_android.dart';
 
 class LocalAuth {
   final LocalAuthentication localAuthentication = LocalAuthentication();
@@ -45,7 +47,7 @@ class LocalAuth {
     final bool check = await checkBiometrics().then((value) => value);
     final bool supported = await checkBiometrics().then((value) => value);
 
-    if (!check || !supported ) {
+    if (!check || !supported) {
       print("Check $check");
       print("Supported $supported");
       return authenticated;
@@ -54,6 +56,12 @@ class LocalAuth {
     try {
       authenticated = await localAuthentication.authenticate(
         localizedReason: 'Desbloquei a nota protegida para ter acesso!',
+        authMessages: <AuthMessages>[
+          const AndroidAuthMessages(
+            signInTitle: 'Oops! Autenticação Biometrica Requerida!',
+            cancelButton: 'Cancelar',
+          ),
+        ],
         options: const AuthenticationOptions(
           useErrorDialogs: true,
           stickyAuth: true,
