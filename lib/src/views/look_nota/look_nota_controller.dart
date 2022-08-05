@@ -1,8 +1,10 @@
 import 'package:notas/src/models/nota.dart';
 import 'package:notas/src/repositories/nota_repositoy.dart';
+import 'package:rx_notifier/rx_notifier.dart';
 
 class LookNotaController {
   final NotaRepository notaRepository;
+  RxNotifier<bool> status = RxNotifier(false);
 
   LookNotaController(this.notaRepository);
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:notas/src/helpers/nota_helper.dart';
 import 'package:notas/src/models/nota.dart';
 import 'package:notas/src/repositories/nota_repository_objetbox_impl.dart';
+import 'package:rx_notifier/rx_notifier.dart';
 
 import 'look_nota_controller.dart';
 
@@ -15,7 +16,6 @@ class LookNotaPage extends StatefulWidget {
 }
 
 class _LookNotaPageState extends State<LookNotaPage> {
-  bool status = false;
   late final LookNotaController lookNotaController;
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -23,11 +23,11 @@ class _LookNotaPageState extends State<LookNotaPage> {
   @override
   void initState() {
     super.initState();
-    titleController.text = widget.nota.title ?? "";
-    descriptionController.text = widget.nota.description;
-    status = widget.nota.status;
     lookNotaController =
         LookNotaController(NotaRepositoryObjectboxImpl(NotaHelper()));
+    lookNotaController.status.value = widget.nota.status;
+    titleController.text = widget.nota.title ?? "";
+    descriptionController.text = widget.nota.description;
   }
 
   @override
@@ -38,18 +38,16 @@ class _LookNotaPageState extends State<LookNotaPage> {
         actions: [
           IconButton(
             onPressed: () {
-              if (status) {
-                setState(() {
-                  status = false;
-                });
-              } else {
-                setState(() {
-                  status = true;
-                });
-              }
+              lookNotaController.status.value =
+                  lookNotaController.status.value ? false : true;
             },
-            icon:
-                Icon(status ? Icons.lock_outline_sharp : Icons.lock_open_sharp),
+            icon: RxBuilder(
+              builder: (BuildContext context) {
+                return Icon(lookNotaController.status.value
+                    ? Icons.lock_outline_sharp
+                    : Icons.lock_open_sharp);
+              },
+            ),
           ),
         ],
         centerTitle: true,
@@ -67,11 +65,11 @@ class _LookNotaPageState extends State<LookNotaPage> {
               id: widget.nota.id!,
               title: titleController.text,
               description: descriptionController.text,
-              status: status);
+              status: lookNotaController.status.value);
           Navigator.pop(context);
         },
         child: const Icon(
-          Icons.save,
+          Icons.edit,
           color: Colors.white,
         ),
         backgroundColor: Colors.black,
