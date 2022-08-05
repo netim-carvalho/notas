@@ -49,12 +49,16 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.only(top: 3.0),
           child: RxBuilder(
             builder: (BuildContext context) {
-              return ListView.builder(
-                itemCount: homeController.rxList.length,
-                itemBuilder: (context, index) {
-                  return cardNota(context, index);
-                },
-              );
+              return homeController.rxList.isEmpty
+                  ? const Center(
+                      child: Text("Lista Vazia"),
+                    )
+                  : ListView.builder(
+                      itemCount: homeController.rxList.length,
+                      itemBuilder: (context, index) {
+                        return cardNota(context, index);
+                      },
+                    );
             },
           ),
         ));
