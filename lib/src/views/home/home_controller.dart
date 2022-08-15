@@ -7,6 +7,8 @@ import 'package:rx_notifier/rx_notifier.dart';
 
 class HomeController {
   final NotaRepository notaRepository;
+  static String? returnError;
+
   RxList<Nota> rxList = RxList<Nota>([]);
 
   HomeController(this.notaRepository);
@@ -17,7 +19,7 @@ class HomeController {
     rxList.addAll(listNota.toList());
   }
 
-  void delete(int id){
+  void delete(int id) {
     notaRepository.delete(id);
     getAll();
   }

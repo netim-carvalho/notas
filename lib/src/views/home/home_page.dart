@@ -64,9 +64,25 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
+  SnackBar get snackBar => SnackBar(
+        content: Text("Erro de Biometria: " + HomeController.returnError!),
+      );
+
   Widget cardNota(BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
+        if (HomeController.returnError != null) {
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          return;
+        }
+        homeController.rxList[index].status
+            ? localAuth.authenticate().then((value) {
+                if (value) {
+                  homeController.calledLookNotaPage(context, index: index);
+                }
+              })
+            : homeController.calledLookNotaPage(context, index: index);
+        /*
         if (homeController.rxList[index].status) {
           localAuth.authenticate().then((value) {
             if (value) {
@@ -76,6 +92,7 @@ class _HomePageState extends State<HomePage> {
         } else {
           homeController.calledLookNotaPage(context, index: index);
         }
+        */
       },
       child: Padding(
         padding: const EdgeInsets.all(1.5),
